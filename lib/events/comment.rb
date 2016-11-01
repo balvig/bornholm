@@ -1,6 +1,6 @@
 module Events
   class Comment < Event
-    PLUS_ONE = ["👍", ":+1:"]
+    PLUS_ONE = ["👍", ":+1:", "+1"]
     RECYCLE = ["♻️", ":recycle:"]
 
     def process

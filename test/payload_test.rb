@@ -30,6 +30,11 @@ class PayloadTest < Minitest::Test
     create_payload(:comment_legacy_plus_one).process
   end
 
+  def test_adding_reviewed_label_if_given_plain_plus_one
+    github.expects(:add_labels_to_an_issue).with("balvig/cp-8", 1, [:Reviewed]).once
+    create_payload(:comment_plain_plus_one).process
+  end
+
   def test_adding_reviewed_label_if_approved_review_submitted
     github.expects(:add_labels_to_an_issue).with("balvig/cp-8", 1, [:Reviewed]).once
     create_payload(:review_approved).process
