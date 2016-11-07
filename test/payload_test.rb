@@ -47,6 +47,11 @@ class PayloadTest < Minitest::Test
     create_payload(:comment_plus_one).process
   end
 
+  def test_not_adding_reviewed_label_if_myself
+    github.expects(:add_labels_to_an_issue).never
+    create_payload(:comment_own).process
+  end
+
   def test_not_adding_labels_to_plain_issues
     github.expects(:add_labels_to_an_issue).never
     create_payload(:issue_comment).process
