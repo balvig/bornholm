@@ -6,7 +6,7 @@ module Events
     def process
       case
       when PLUS_ONE.any? { |word| body.include?(word) }
-        add_label(:Reviewed)
+        add_label(:Reviewed) if not_self_reviewed?
       when RECYCLE.any? { |word| body.include?(word) }
         remove_label(:Reviewed)
       end
@@ -14,8 +14,24 @@ module Events
 
     private
 
+      def comment
+        @_comment ||= payload.comment
+      end
+
       def body
-        payload.comment.body
+        comment.body
+      end
+
+      def commenter
+        comment.user.login
+      end
+
+      def owner
+        issue.user.login
+      end
+
+      def not_self_reviewed?
+        commenter != owner
       end
   end
 end
