@@ -30,7 +30,6 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
-    hashie (3.4.1)
     highline (1.7.8)
     hirb (0.7.3)
     hirb-colors (0.0.1)
@@ -97,7 +96,6 @@ PLATFORMS
 
 DEPENDENCIES
   cp8_cli
-  hashie
   minitest
   minitest-focus
   minitest-reporters

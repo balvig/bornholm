@@ -1,8 +1,5 @@
 require "payload"
-require "events/event"
-require "events/issue_update"
-require "events/pull_request_update"
-require "label"
+require "processor"
 require "trello"
 
 class Cp8

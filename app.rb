@@ -10,7 +10,7 @@ require "cp8"
 set :show_exceptions, false
 
 post "/payload" do
-  Payload.new_from_json(request.body.read).process
+  Processor.new(payload, config: config).process
   "Done!"
 end
 
@@ -18,3 +18,13 @@ error 500 do
   error = env["sinatra.error"]
   "#{error.class}: #{error.message}"
 end
+
+private
+
+  def payload
+    Payload.new_from_json(request.body.read)
+  end
+
+  def config
+    params[:config]
+  end
