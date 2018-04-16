@@ -28,6 +28,12 @@ class Issue
     reviewers.without(user, *User.bots)
   end
 
+  def requested_reviewers
+    github.pull_request_review_requests(repo, number).users.map do |resource|
+      User.from_resource(resource)
+    end
+  end
+
   def user
     return unless user_resource
 

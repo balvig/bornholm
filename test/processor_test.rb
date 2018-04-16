@@ -103,15 +103,25 @@ class ProcessorTest < Minitest::Test
     github.stubs(:pull_request).returns(additions: 5, deletions: 5)
     process_payload(:pull_request)
 
-    assert_equal "<!here> :mag: Review", last_notification[:text]
-    assert_equal "<!here> :mag: Review", last_notification[:fallback]
+    assert_equal "<!here> :mag: Quick Review", last_notification[:text]
+    assert_equal "<!here> :mag: Quick Review", last_notification[:fallback]
     assert_equal "+5 / -5", last_notification_attachment[:fields].last[:value]
+  end
+
+  def test_notifying_pull_requests_with_requested_reviewers
+    github.stubs(:pull_request).returns(additions: 5)
+    github.expects(:pull_request_review_requests).with("balvig/cp-8", 1).once.returns(
+      stub(users: [{ login: "reviewer" }])
+    )
+    process_payload(:pull_request)
+
+    assert_equal "<@reviewer> :mag: Quick Review", last_notification[:text]
   end
 
   def test_notifying_unwipped_issues
     process_payload(:pull_request_removed_wip)
 
-    assert_equal "<!here> :mag: Review", last_notification[:text]
+    assert_equal "<!here> :mag: Quick Review", last_notification[:text]
   end
 
   def test_notifying_requested_changes
@@ -156,6 +166,7 @@ class ProcessorTest < Minitest::Test
         add_label: true,
         labels_for_issue: [],
         search_issues: stub(items: []),
+        pull_request_review_requests: stub(users: []),
         pull_request: extended_pull_request_data
       )
     end

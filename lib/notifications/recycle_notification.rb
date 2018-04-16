@@ -5,9 +5,17 @@ class RecycleNotification < ReviewRequestNotification
     super(
       issue: issue,
       icon: :recycle,
-      action: "Review changes",
-      link: comment.html_url,
-      mentions: issue.peer_reviewers.map(&:chat_name)
+      link: comment.html_url
     )
   end
+
+  private
+
+    def action
+      "Review changes"
+    end
+
+    def mentions
+      @_mentions ||= issue.peer_reviewers.map(&:chat_name)
+    end
 end
