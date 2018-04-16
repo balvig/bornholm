@@ -1,4 +1,4 @@
-# CP-8 Cookpad Bot
+# CP-8 Cookpad Bot (test branch)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
