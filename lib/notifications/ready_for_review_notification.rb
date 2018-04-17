@@ -1,8 +1,6 @@
 require "notifications/review_request_notification"
 
 class ReadyForReviewNotification < ReviewRequestNotification
-  EVERYONE = "<!here>"
-
   def initialize(issue:)
     super(
       issue: issue,
@@ -21,12 +19,10 @@ class ReadyForReviewNotification < ReviewRequestNotification
     end
 
     def mentions
-      return [] unless issue.small?
-
-      if requested_reviewers.any?
+      if issue.small?
         requested_reviewers
       else
-        [EVERYONE]
+        []
       end
     end
 

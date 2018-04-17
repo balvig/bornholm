@@ -99,12 +99,12 @@ class ProcessorTest < Minitest::Test
     assert_equal ":mag: Review", last_notification[:text]
   end
 
-  def test_notifying_new_small_pull_requests_with_mention
+  def test_notifying_new_small_pull_requests_without_mention
     github.stubs(:pull_request).returns(additions: 5, deletions: 5)
     process_payload(:pull_request)
 
-    assert_equal "<!here> :mag: Quick Review", last_notification[:text]
-    assert_equal "<!here> :mag: Quick Review", last_notification[:fallback]
+    assert_equal ":mag: Quick Review", last_notification[:text]
+    assert_equal ":mag: Quick Review", last_notification[:fallback]
     assert_equal "+5 / -5", last_notification_attachment[:fields].last[:value]
   end
 
@@ -121,7 +121,7 @@ class ProcessorTest < Minitest::Test
   def test_notifying_unwipped_issues
     process_payload(:pull_request_removed_wip)
 
-    assert_equal "<!here> :mag: Quick Review", last_notification[:text]
+    assert_equal ":mag: Quick Review", last_notification[:text]
   end
 
   def test_notifying_requested_changes
