@@ -42,6 +42,10 @@ class Payload
     action.submitted? && review&.decisive?
   end
 
+  def opened_action?
+    action.opened?
+  end
+
   def pull_request_action?
     data[:pull_request].present?
   end

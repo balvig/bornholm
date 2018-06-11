@@ -66,6 +66,13 @@ class ProcessorTest < Minitest::Test
     process_payload(:pull_request_added_wip)
   end
 
+  def test_adding_new_issues_to_project
+    github.expects(:column_cards).once.returns([stub(content_url: "https://api.github.com/repos/api-playground/projects-test/issues/3")])
+    github.expects(:create_project_card).once
+
+    process_payload(:issue_wip, config: { review_channel: "#reviews", project_column_id: 49 } )
+  end
+
   def test_not_adding_labels_to_plain_issues
     github.expects(:add_labels_to_an_issue).never
 
@@ -138,15 +145,15 @@ class ProcessorTest < Minitest::Test
 
   private
 
-    def process_payload(file)
-      process create_payload(file)
+    def process_payload(file, config: default_config)
+      process(create_payload(file), config: config)
     end
 
-    def process(payload)
+    def process(payload, config: default_config)
       Processor.new(payload, config: config).process
     end
 
-    def config
+    def default_config
       { review_channel: "#reviews" }
     end
 

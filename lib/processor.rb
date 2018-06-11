@@ -3,6 +3,7 @@ require "configuration"
 require "issue_closer"
 require "notifier"
 require "labeler"
+require "project_manager"
 require "notifications/recycle_notification"
 require "notifications/review_complete_notification"
 require "notifications/ready_for_review_notification"
@@ -24,6 +25,7 @@ class Processor
     notify_recycle
     notify_review
     add_labels
+    move_new_issue_to_project
     close_stale_issues
     logs.join("\n")
   end
@@ -69,6 +71,13 @@ class Processor
     def add_labels
       log "Updating labels"
       Labeler.new(payload.issue).run
+    end
+
+    def move_new_issue_to_project
+      return unless payload.opened_action?
+
+      log "Moving new issues to project"
+      ProjectManager.new(issue: payload.issue, project_column_id: config.project_column_id).run
     end
 
     def close_stale_issues
