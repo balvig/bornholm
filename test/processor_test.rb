@@ -73,6 +73,20 @@ class ProcessorTest < Minitest::Test
     process_payload(:issue_wip, config: { review_channel: "#reviews", project_column_id: 49 } )
   end
 
+  def test_not_adding_new_issues_to_project_if_column_not_in_project
+    github.expects(:column_cards).once.raises(Octokit::NotFound)
+    github.expects(:create_project_card).never
+
+    process_payload(:issue_wip, config: { review_channel: "#reviews", project_column_id: 49 } )
+  end
+
+  def test_not_adding_new_pr_to_project
+    github.expects(:column_cards).never
+    github.expects(:create_project_card).never
+
+    process_payload(:pull_request, config: { review_channel: "#reviews", project_column_id: 49 } )
+  end
+
   def test_not_adding_labels_to_plain_issues
     github.expects(:add_labels_to_an_issue).never
 

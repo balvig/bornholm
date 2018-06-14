@@ -15,7 +15,11 @@ class ProjectManager
     attr_reader :issue, :project_column_id
 
     def belongs_to_project?
-      github.column_cards(project_column_id).map(&:content_url).include?(issue.html_url)
+      begin
+        github.column_cards(project_column_id).map(&:content_url).include?(issue.html_url)
+      rescue  Octokit::NotFound, Octokit::Unauthorized
+        {}
+      end
     end
 
     def add_to_project
