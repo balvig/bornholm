@@ -42,12 +42,8 @@ class Payload
     action.submitted? && review&.decisive?
   end
 
-  def opened_action?
-    action.opened?
-  end
-
   def opened_new_issue?
-    opened_action? && issue_action?
+    action.opened? && issue_action?
   end
 
   def issue_action?
