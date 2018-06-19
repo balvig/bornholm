@@ -32,4 +32,5 @@ CP-8 will:
 ```ruby
 /payload?config[stale_issue_weeks]=6 # Set stale issue cutoff to 6 weeks
 /payload?config[review_channel]=reviews # Send review requests/updates to specified Slack channel
+/payload?config[project_column_id]=49 # Automatically add new issues to a project column
 ```
