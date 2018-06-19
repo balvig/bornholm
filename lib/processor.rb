@@ -75,7 +75,7 @@ class Processor
 
     def move_new_issue_to_project
       if payload.opened_new_issue?
-        log "Moving new issues to project"
+        log "Adding card for new issue in configured project column"
         log ProjectManager.new(issue: payload.issue, project_column_id: config.project_column_id).run
       end
     end
