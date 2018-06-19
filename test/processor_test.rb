@@ -22,7 +22,7 @@ class ProcessorTest < Minitest::Test
   end
 
   def test_closing_stale_prs
-    github.expects(:search_issues).with("repo:balvig/cp-8 is:open updated:<1969-12-04T00:00:00+00:00").once.returns(stub(items: [{ number: 1 }]))
+    github.expects(:search_issues).with("repo:balvig/cp-8 is:open updated:<1969-12-04T00:00:00+00:00").once.returns(stub(items: [{ number: 1, id: 1 }]))
     github.expects(:add_comment)
     github.expects(:close_issue).with("balvig/cp-8", 1)
     github.expects(:add_labels_to_an_issue).with("balvig/cp-8", 1, [:Icebox]).once
@@ -68,7 +68,7 @@ class ProcessorTest < Minitest::Test
   end
 
   def test_adding_new_issues_to_project
-    github.expects(:create_project_card).with(49, content_id: 2, content_type: "Issue"). once
+    github.expects(:create_project_card).with(49, content_id: 137013866, content_type: "Issue"). once
 
     process_payload(:issue_wip, config: { project_column_id: PROJECT_COLUMN_ID } )
   end

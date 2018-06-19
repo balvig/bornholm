@@ -15,7 +15,7 @@ class ProjectManager
     attr_reader :issue, :project_column_id
 
     def add_to_project
-      github.create_project_card(project_column_id, content_id: issue.number, content_type: "Issue")
+      github.create_project_card(project_column_id, content_id: issue.id, content_type: "Issue")
       "Card created."
     rescue Octokit::NotFound
       "Could not find column with id #{project_column_id}."
