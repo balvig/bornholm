@@ -5,7 +5,7 @@ class ProjectManager
   end
 
   def run
-    return "project manager not configured, skipping." if project_column_id.blank?
+    return "Project manager not configured, skipping." if project_column_id.blank?
 
     add_to_project
   end
@@ -16,11 +16,11 @@ class ProjectManager
 
     def add_to_project
       github.create_project_card(project_column_id, content_id: issue.number, content_type: "Issue")
-      "card created."
+      "Card created."
     rescue Octokit::NotFound
-      "could not find column with id #{project_column_id}"
+      "Could not find column with id #{project_column_id}."
     rescue Octokit::Unauthorized
-      "could not find column with id #{project_column_id} in this project"
+      "Could not find column with id #{project_column_id} in this project."
     end
 
     def github
