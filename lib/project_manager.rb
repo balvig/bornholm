@@ -16,11 +16,11 @@ class ProjectManager
 
     def add_to_project
       github.create_project_card(project_column_id, content_id: issue.id, content_type: "Issue")
-      "Card created."
+      "Card created"
     rescue Octokit::NotFound
-      "Could not find column with id #{project_column_id}."
+      "Could not find column with id #{project_column_id}"
     rescue Octokit::Unauthorized
-      "Could not find column with id #{project_column_id} in this project."
+      "Could not find column with id #{project_column_id} in this project"
     end
 
     def github
