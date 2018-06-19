@@ -5,8 +5,8 @@ class ProjectManager
   end
 
   def run
-    return unless project_column_id && !belongs_to_project?
-    
+    return "project manager not configured, skipping." if project_column_id.blank?
+
     add_to_project
   end
 
@@ -14,20 +14,16 @@ class ProjectManager
 
     attr_reader :issue, :project_column_id
 
-    def belongs_to_project?
-      begin
-        github.column_cards(project_column_id).map(&:content_url).include?(issue.html_url)
-      rescue  Octokit::NotFound, Octokit::Unauthorized
-        {}
-      end
-    end
-
     def add_to_project
-      github.create_project_card(project_column_id, content_id: issue.number, content_type: 'Issue')
+      github.create_project_card(project_column_id, content_id: issue.number, content_type: "Issue")
+      "card created."
+    rescue Octokit::NotFound
+      "could not find column with id #{project_column_id}"
+    rescue Octokit::Unauthorized
+      "could not find column with id #{project_column_id} in this project"
     end
 
     def github
       Cp8.github_client
     end
-
 end

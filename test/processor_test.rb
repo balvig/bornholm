@@ -2,6 +2,7 @@ require "test_helper"
 
 class ProcessorTest < Minitest::Test
   CP8_USER_ID = 9999
+  PROJECT_COLUMN_ID = 49
 
   class TestChatClient
     cattr_accessor :deliveries do
@@ -67,24 +68,21 @@ class ProcessorTest < Minitest::Test
   end
 
   def test_adding_new_issues_to_project
-    github.expects(:column_cards).once.returns([stub(content_url: "https://api.github.com/repos/api-playground/projects-test/issues/3")])
-    github.expects(:create_project_card).once
+    github.expects(:create_project_card).with(49, content_id: 2, content_type: "Issue"). once
 
-    process_payload(:issue_wip, config: { review_channel: "#reviews", project_column_id: 49 } )
+    process_payload(:issue_wip, config: { project_column_id: PROJECT_COLUMN_ID } )
   end
 
-  def test_not_adding_new_issues_to_project_if_column_not_in_project
-    github.expects(:column_cards).once.raises(Octokit::NotFound)
-    github.expects(:create_project_card).never
+  def test_adding_new_issues_to_project_if_column_not_in_project
+    github.expects(:create_project_card).raises(Octokit::NotFound)
 
-    process_payload(:issue_wip, config: { review_channel: "#reviews", project_column_id: 49 } )
+    process_payload(:issue_wip, config: { project_column_id: PROJECT_COLUMN_ID } )
   end
 
   def test_not_adding_new_pr_to_project
-    github.expects(:column_cards).never
     github.expects(:create_project_card).never
 
-    process_payload(:pull_request, config: { review_channel: "#reviews", project_column_id: 49 } )
+    process_payload(:pull_request, config: { project_column_id: PROJECT_COLUMN_ID } )
   end
 
   def test_not_adding_labels_to_plain_issues

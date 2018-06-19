@@ -46,6 +46,14 @@ class Payload
     action.opened?
   end
 
+  def opened_new_issue?
+    opened_action? && issue_action?
+  end
+
+  def issue_action?
+    !pull_request_action?
+  end
+
   def pull_request_action?
     data[:pull_request].present?
   end

@@ -74,10 +74,10 @@ class Processor
     end
 
     def move_new_issue_to_project
-      return unless payload.opened_action? && !payload.pull_request_action?
-
-      log "Moving new issues to project"
-      ProjectManager.new(issue: payload.issue, project_column_id: config.project_column_id).run
+      if payload.opened_new_issue?
+        log "Moving new issues to project"
+        log ProjectManager.new(issue: payload.issue, project_column_id: config.project_column_id).run
+      end
     end
 
     def close_stale_issues
