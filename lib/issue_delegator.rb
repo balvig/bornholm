@@ -10,7 +10,7 @@ class IssueDelegator
 
     if label.prefix == prefix
       create_copy_of_issue_in_selected_repo
-      close_parent_issue
+      close_original_issue
     end
   end
 
@@ -22,7 +22,7 @@ class IssueDelegator
       github.create_issue(label.suffix, issue.title, moved_issue_body)
     end
 
-    def close_parent_issue
+    def close_original_issue
       github.close_issue(issue.repo, issue.number)
     end
 
@@ -31,10 +31,10 @@ class IssueDelegator
     end
 
     def moved_issue_body
-      issue_header + issue.body
+      link_to_original_issue + issue.body
     end
 
-    def issue_header
+    def link_to_original_issue
       "_Moved from #{issue.html_url}_\n\n---\n"
     end
 end
