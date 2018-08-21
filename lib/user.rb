@@ -1,3 +1,5 @@
+require "yaml"
+
 class User
   BOT_LOGINS = %w(houndci-bot)
   MAPPINGS = YAML::load_file(File.join(__dir__, "user_mappings.yml"))
