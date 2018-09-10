@@ -3,6 +3,7 @@ ruby "2.4.2"
 
 gem "activesupport"
 gem "dotenv"
+gem "jwt"
 gem "octokit"
 gem "puma"
 gem "slack-notifier"

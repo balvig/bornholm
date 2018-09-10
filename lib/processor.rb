@@ -19,7 +19,7 @@ class Processor
   end
 
   def process
-    return if event_triggered_by_cp8?
+    return if event_triggered_by_bot?
 
     notify_new_pull_request
     notify_unwip
@@ -102,12 +102,8 @@ class Processor
       @_notifier ||= Notifier.new(channel: config.review_channel)
     end
 
-    def event_triggered_by_cp8?
-      current_user.id == payload.sender_id
-    end
-
-    def current_user
-      github.user
+    def event_triggered_by_bot?
+      payload.sender_bot?
     end
 
     def repo

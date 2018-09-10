@@ -1,8 +1,10 @@
 require "dotenv/load"
+require "octokit"
+require "slack-notifier"
+
 require "payload"
 require "processor"
 require "silent_chat_client"
-require "slack-notifier"
 
 class Cp8
   DEFAULT_CHAT_USER = "CP-8"
@@ -11,7 +13,7 @@ class Cp8
     attr_writer :github_client, :chat_client
 
     def github_client
-      @github_client || octokit
+      @github_client
     end
 
     def chat_client
@@ -19,11 +21,6 @@ class Cp8
     end
 
     private
-
-      def octokit
-        raise "OCTOKIT_ACCESS_TOKEN not set. Get one from https://github.com/settings/tokens" unless ENV["OCTOKIT_ACCESS_TOKEN"]
-        @_octokit ||= Octokit::Client.new(access_token: ENV["OCTOKIT_ACCESS_TOKEN"])
-      end
 
       def slack
         return unless ENV["SLACK_WEBHOOK_URL"]

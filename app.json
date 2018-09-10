@@ -3,8 +3,11 @@
   "description": "GitHub review bot",
   "repository": "https://github.com/balvig/cp8",
   "env": {
-    "OCTOKIT_ACCESS_TOKEN": {
-      "description": "GitHub oauth token for the bot user account"
+    "GITHUB_APP_IDENTIFIER": {
+      "description": "Get the app identifier your app page after you create your app"
+    },
+    "GITHUB_PRIVATE_KEY": {
+      "description": "GitHub app private key with linebreaks converted to /n"
     },
     "SLACK_WEBHOOK_URL": {
       "description": "Slack webhook URL for sending chat notifications",

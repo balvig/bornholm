@@ -26,8 +26,8 @@ class Payload
     data[:repository][:full_name]
   end
 
-  def sender_id
-    data[:sender][:id]
+  def sender_bot?
+    data[:sender][:type] == "Bot"
   end
 
   def unwip_action?
@@ -70,6 +70,10 @@ class Payload
     return unless comment_params
 
     Comment.new(comment_params)
+  end
+
+  def installation_id
+    data[:installation][:id]
   end
 
   private

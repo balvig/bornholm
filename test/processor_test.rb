@@ -1,7 +1,6 @@
 require "test_helper"
 
 class ProcessorTest < Minitest::Test
-  CP8_USER_ID = 9999
   PROJECT_COLUMN_ID = 49
 
   class TestChatClient
@@ -194,7 +193,6 @@ class ProcessorTest < Minitest::Test
 
     def build_fake_github
       stub(
-        user: stub(id: CP8_USER_ID),
         label: true,
         add_label: true,
         labels_for_issue: [],
