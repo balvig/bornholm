@@ -15,7 +15,7 @@
 
 CP-8 can:
 
-- Close issues with no activity
+- Close stale issues with no activity
 - Add a `WIP` label to PRs with "[WIP]" in title
 - Notify in specified Slack channel when:
   - a new (non-WIP) PR is opened
@@ -31,10 +31,10 @@ CP-8 can:
 
 ## Configuration
 
-Add `.cp8.yml` file to root of project:
+Add `.cp8.yml` file to root of project, and turn on features by configuring them:
 
 ```yml
-stale_issue_weeks: 6 # Set stale issue cutoff to 6 weeks
+stale_issue_weeks: 4 # Set stale issue cutoff to 4 weeks
 review_channel: reviews # Send review requests/updates to specified Slack channel
 project_column_id: 49 # Automatically add new issues to a project column
 move_to_prefix:  move-to # Move issue to other repo when labeled with prefix, ie `move-to:cookpad/cp8`
