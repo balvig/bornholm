@@ -1,8 +1,10 @@
-require "card_updater"
+require "active_support"
 require "configuration"
 require "issue_closer"
+require "issue_delegator"
 require "notifier"
 require "labeler"
+require "project_manager"
 require "notifications/recycle_notification"
 require "notifications/review_complete_notification"
 require "notifications/ready_for_review_notification"
@@ -17,14 +19,15 @@ class Processor
   end
 
   def process
-    return if event_triggered_by_cp8?
+    return if event_triggered_by_bot?
 
     notify_new_pull_request
     notify_unwip
     notify_recycle
     notify_review
-    update_trello_cards # backwards compatibility for now
     add_labels
+    move_new_issue_to_project
+    delegate_issue
     close_stale_issues
     logs.join("\n")
   end
@@ -57,7 +60,7 @@ class Processor
       return unless payload.recycle_request?
 
       log "Notifying recycle request"
-      notify RecycleNotification.new(issue: payload.issue, comment: payload.comment)
+      notify RecycleNotification.new(issue: payload.issue, trigger: payload.comment || payload.review)
     end
 
     def notify_review
@@ -67,14 +70,23 @@ class Processor
       notify ReviewCompleteNotification.new(review: payload.review, issue: payload.issue)
     end
 
-    def update_trello_cards
-      log "Updating trello cards"
-      CardUpdater.new(payload).run
-    end
-
     def add_labels
       log "Updating labels"
       Labeler.new(payload.issue).run
+    end
+
+    def move_new_issue_to_project
+      if payload.opened_new_issue?
+        log "Adding card for new issue in configured project column"
+        log ProjectManager.new(issue: payload.issue, project_column_id: config.project_column_id).run
+      end
+    end
+
+    def delegate_issue
+      if payload.label_added?
+        log "Label added, pondering whether to move"
+        IssueDelegator.new(label: payload.label, issue: payload.issue, prefix: config.move_to_prefix).run
+      end
     end
 
     def close_stale_issues
@@ -90,12 +102,8 @@ class Processor
       @_notifier ||= Notifier.new(channel: config.review_channel)
     end
 
-    def event_triggered_by_cp8?
-      current_user.id == payload.sender_id
-    end
-
-    def current_user
-      github.user
+    def event_triggered_by_bot?
+      payload.sender_bot?
     end
 
     def repo

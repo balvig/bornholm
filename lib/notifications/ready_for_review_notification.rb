@@ -4,9 +4,29 @@ class ReadyForReviewNotification < ReviewRequestNotification
   def initialize(issue:)
     super(
       issue: issue,
-      icon: :mag,
-      action: "Review",
-      mentions: issue.small? ? ["<!here>"] : []
+      icon: :mag
     )
   end
+
+  private
+
+    def action
+      if issue.small?
+        "Small PR"
+      else
+        "New PR"
+      end
+    end
+
+    def mentions
+      if issue.small?
+        requested_reviewers
+      else
+        []
+      end
+    end
+
+    def requested_reviewers
+      @_requested_reviewers ||= issue.requested_reviewers.map(&:chat_name)
+    end
 end

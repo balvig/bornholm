@@ -1,16 +1,14 @@
 require "notifications/notification"
 
 class ReviewRequestNotification < Notification
-  def initialize(issue:, icon:, action:, mentions: [], link: nil)
+  def initialize(issue:, icon:, link: nil)
     @issue = issue
     @icon = icon
-    @action = action
-    @mentions = mentions
     @link = link || issue.html_url
   end
 
   def text
-    "#{mention_text}:#{icon}: #{action}"
+    ":#{icon}: #{action}#{mention_text}"
   end
 
   def attachments
@@ -24,7 +22,15 @@ class ReviewRequestNotification < Notification
     def mention_text
       return if mentions.empty?
 
-      mentions.join(", ") + " "
+      " - " + mentions.join(", ") + " please"
+    end
+
+    def mentions
+      raise "Define in child class"
+    end
+
+    def action
+      raise "Define in child class"
     end
 
     def attachment

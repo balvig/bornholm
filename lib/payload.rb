@@ -1,3 +1,4 @@
+require "active_support/core_ext/hash"
 require "json"
 require "comment"
 require "issue"
@@ -25,8 +26,8 @@ class Payload
     data[:repository][:full_name]
   end
 
-  def sender_id
-    data[:sender][:id]
+  def sender_bot?
+    data[:sender][:type] == "Bot"
   end
 
   def unwip_action?
@@ -34,25 +35,45 @@ class Payload
   end
 
   def recycle_request?
-    action.created? && comment&.recycle_request?
+    added_recycle_comment? || dismissed_review?
   end
 
   def review_action?
     action.submitted? && review&.decisive?
   end
 
+  def opened_new_issue?
+    action.opened? && issue_action?
+  end
+
+  def issue_action?
+    !pull_request_action?
+  end
+
   def pull_request_action?
     data[:pull_request].present?
+  end
+
+  def label_added?
+    action.labeled?
   end
 
   def action
     ActiveSupport::StringInquirer.new(data[:action])
   end
 
+  def label
+    Label.new(data[:label][:name])
+  end
+
   def comment
     return unless comment_params
 
     Comment.new(comment_params)
+  end
+
+  def installation_id
+    data[:installation][:id]
   end
 
   private
@@ -77,5 +98,13 @@ class Payload
 
     def previous_title
       data.fetch(:changes, {}).fetch(:title, {}).fetch(:from, {}) || ""
+    end
+
+    def added_recycle_comment?
+      action.created? && comment&.recycle_request?
+    end
+
+    def dismissed_review?
+      action == "dismissed"
     end
 end

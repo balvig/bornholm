@@ -3,10 +3,12 @@ class IssueCloser
 
   def initialize(repo, weeks: nil)
     @repo = repo
-    @weeks = (weeks || 4).to_i
+    @weeks = weeks&.to_i
   end
 
   def run
+    return if weeks.blank?
+
     stale_issues.each do |issue|
       github.close_issue(issue.repo, issue.number)
       github.add_comment(issue.repo, issue.number, comment)

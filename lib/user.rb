@@ -1,5 +1,7 @@
+require "yaml"
+
 class User
-  BOT_LOGINS = %w(houndci-bot)
+  BOT_LOGINS = %w(houndci-bot cookpad-devel)
   MAPPINGS = YAML::load_file(File.join(__dir__, "user_mappings.yml"))
   attr_reader :login
 

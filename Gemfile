@@ -1,8 +1,9 @@
 source "https://rubygems.org"
 ruby "2.4.2"
 
-gem "cp8_cli"
+gem "activesupport"
 gem "dotenv"
+gem "jwt"
 gem "octokit"
 gem "puma"
 gem "slack-notifier"

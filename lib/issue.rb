@@ -1,13 +1,16 @@
+require "active_support/core_ext/array"
 require "user"
 
 class Issue
   WIP_TAG = "WIP"
-  SMALL_PR_ADDITION_LIMIT = 50
+  SMALL_PR_ADDITION_LIMIT = 100
 
-  attr_reader :number, :html_url, :repo, :title
+  attr_reader :id, :number, :html_url, :repo, :title, :body
 
-  def initialize(number:, repo:, title: nil, state: nil, html_url: nil, user: nil, **other)
+  def initialize(id:, number:, repo:, title: nil, body: nil, state: nil, html_url: nil, user: nil, **other)
+    @id = id
     @title = title
+    @body = body
     @state = state
     @number = number
     @html_url = html_url
@@ -23,12 +26,14 @@ class Issue
     state == "closed"
   end
 
-  def card_ids
-    delivers_meta_info.scan(/(?:#(\w+))/).flatten
-  end
-
   def peer_reviewers
     reviewers.without(user, *User.bots)
+  end
+
+  def requested_reviewers
+    github.pull_request_review_requests(repo, number).users.map do |resource|
+      User.from_resource(resource)
+    end
   end
 
   def user
@@ -67,10 +72,6 @@ class Issue
 
     def title_tags
       title.scan(/\[(\w+)\]/).flatten
-    end
-
-    def delivers_meta_info
-      title[/\[Delivers.+\]/] || ""
     end
 
     def extended_pr_data

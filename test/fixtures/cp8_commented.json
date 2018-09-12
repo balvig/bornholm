@@ -181,7 +181,7 @@
     "repos_url": "https://api.github.com/users/balvig/repos",
     "events_url": "https://api.github.com/users/balvig/events{/privacy}",
     "received_events_url": "https://api.github.com/users/balvig/received_events",
-    "type": "User",
+    "type": "Bot",
     "site_admin": false
   }
 }

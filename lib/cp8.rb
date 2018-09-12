@@ -1,22 +1,19 @@
 require "dotenv/load"
+require "octokit"
+require "slack-notifier"
+
 require "payload"
 require "processor"
 require "silent_chat_client"
-require "trello"
-require "slack-notifier"
 
 class Cp8
   DEFAULT_CHAT_USER = "CP-8"
 
   class << self
-    attr_writer :trello_client, :github_client, :chat_client
-
-    def trello_client
-      @trello_client || trello_flow_api
-    end
+    attr_writer :github_client, :chat_client
 
     def github_client
-      @github_client || octokit
+      @github_client
     end
 
     def chat_client
@@ -24,16 +21,6 @@ class Cp8
     end
 
     private
-
-      def trello_flow_api
-        raise "TRELLO_KEY and/or TRELLO_TOKEN not set" unless ENV["TRELLO_KEY"] && ENV["TRELLO_TOKEN"]
-        @_trello_client ||= Trello.new(key: ENV["TRELLO_KEY"], token: ENV["TRELLO_TOKEN"])
-      end
-
-      def octokit
-        raise "OCTOKIT_ACCESS_TOKEN not set" unless ENV["OCTOKIT_ACCESS_TOKEN"]
-        @_octokit ||= Octokit::Client.new(access_token: ENV["OCTOKIT_ACCESS_TOKEN"])
-      end
 
       def slack
         return unless ENV["SLACK_WEBHOOK_URL"]

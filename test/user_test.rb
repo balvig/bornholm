@@ -20,6 +20,6 @@ class UserTest < Minitest::Test
 
   def test_chat_name_github_to_slack_mapping
     user = User.new(login: "firewalker06")
-    assert_equal "<@didik>", user.chat_name
+    assert_equal "<@U02JXH8J4>", user.chat_name
   end
 end
