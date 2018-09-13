@@ -42,14 +42,6 @@ class Payload
     action.submitted? && review&.decisive?
   end
 
-  def opened_new_issue?
-    action.opened? && issue_action?
-  end
-
-  def issue_action?
-    !pull_request_action?
-  end
-
   def pull_request_action?
     data[:pull_request].present?
   end
