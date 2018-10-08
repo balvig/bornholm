@@ -35,6 +35,6 @@ class IssueDelegator
     end
 
     def link_to_original_issue
-      "_Moved from #{issue.html_url}_\n\n---\n"
+      "_Moved from #{issue.html_url} (cc @#{issue.user.login})_\n\n---\n"
     end
 end
