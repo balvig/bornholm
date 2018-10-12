@@ -174,6 +174,13 @@ class ProcessorTest < Minitest::Test
     process_payload(:move_to_label, config: { move_to_prefix: "move-to" } )
   end
 
+  def test_moving_issues_to_repo_without_permissions
+    github.expects(:create_issue).once.raises(Octokit::NotFound)
+    github.expects(:add_comment)
+
+    process_payload(:move_to_label, config: { move_to_prefix: "move-to" } )
+  end
+
   private
 
     def process_payload(file, config: default_config)
