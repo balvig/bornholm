@@ -3,6 +3,7 @@ require "json"
 require "comment"
 require "issue"
 require "review"
+require "tags"
 
 class Payload
   def self.new_from_json(raw_json)
@@ -31,7 +32,11 @@ class Payload
   end
 
   def unwip_action?
-    action.edited? && !issue.wip? && previous_title.include?(Issue::WIP_TAG)
+    tags.removed.include?(:wip)
+  end
+
+  def blocker_action?
+    tags.added.include?(:blocker)
   end
 
   def recycle_request?
@@ -96,8 +101,12 @@ class Payload
       data[:issue] || data[:pull_request]
     end
 
+    def tags
+      Tags.new(issue.title, previous_title)
+    end
+
     def previous_title
-      data.fetch(:changes, {}).fetch(:title, {}).fetch(:from, {}) || ""
+      IssueTitle.new(data.fetch(:changes, {}).fetch(:title, {}).fetch(:from, {}) || "")
     end
 
     def added_recycle_comment?

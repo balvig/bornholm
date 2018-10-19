@@ -18,6 +18,8 @@ class ProcessorTest < Minitest::Test
     Time.stubs(:now).returns(Time.at(0))
     Cp8.github_client = github
     Cp8.chat_client = TestChatClient.new
+    Cp8.chat_client.deliveries.clear
+    TestChatClient.deliveries.clear
   end
 
   def test_closing_stale_prs
@@ -153,6 +155,12 @@ class ProcessorTest < Minitest::Test
     process_payload(:pull_request_removed_wip)
 
     assert_equal ":mag: Small PR", last_notification[:text]
+  end
+
+  def test_notifying_blocked_prs
+    process_payload(:pull_request_added_blocker)
+
+    assert_equal ":zap: Blocking PR needs review - <!here> please", last_notification[:text]
   end
 
   def test_notifying_requested_changes

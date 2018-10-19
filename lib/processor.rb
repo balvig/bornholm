@@ -5,6 +5,7 @@ require "issue_delegator"
 require "notifier"
 require "labeler"
 require "project_manager"
+require "notifications/blocking_pr_notification"
 require "notifications/recycle_notification"
 require "notifications/review_complete_notification"
 require "notifications/ready_for_review_notification"
@@ -23,6 +24,7 @@ class Processor
 
     notify_new_pull_request
     notify_unwip
+    notify_blocker
     notify_recycle
     notify_review
     add_labels
@@ -54,6 +56,13 @@ class Processor
 
       log "Notifying unwip"
       notify ReadyForReviewNotification.new(issue: payload.issue)
+    end
+
+    def notify_blocker
+      return unless payload.blocker_action?
+
+      log "Notifying blocking PR "
+      notify BlockingPrNotification.new(issue: payload.issue)
     end
 
     def notify_recycle

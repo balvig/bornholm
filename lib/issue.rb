@@ -1,15 +1,15 @@
 require "active_support/core_ext/array"
+require "issue_title"
 require "user"
 
 class Issue
-  WIP_TAG = "WIP"
   SMALL_PR_ADDITION_LIMIT = 100
 
   attr_reader :id, :number, :html_url, :repo, :title, :body
 
   def initialize(id:, number:, repo:, title: nil, body: nil, state: nil, html_url: nil, user: nil, **other)
     @id = id
-    @title = title
+    @title = IssueTitle.new(title)
     @body = body
     @state = state
     @number = number
@@ -19,7 +19,7 @@ class Issue
   end
 
   def wip?
-    title_tags.include?(WIP_TAG)
+    title.tags.include?(:wip)
   end
 
   def closed?
@@ -68,10 +68,6 @@ class Issue
       github.pull_request_reviews(repo, number)
     rescue Octokit::NotFound
       []
-    end
-
-    def title_tags
-      title.scan(/\[(\w+)\]/).flatten
     end
 
     def extended_pr_data
