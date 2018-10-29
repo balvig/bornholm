@@ -22,6 +22,7 @@ CP-8 can:
   - a WIP PR is "un-WIPped"
   - a `:recycle:` comment is posted
   - a PR is approved/has changes requested
+  - a PR is blocking other PRs signified by having `[Blocker]` in the title
 - Automatically add new issues to projects
 - Move issues to other repos using labels
 
