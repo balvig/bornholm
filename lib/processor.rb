@@ -1,7 +1,6 @@
 require "active_support"
 require "configuration"
 require "issue_closer"
-require "issue_delegator"
 require "notifier"
 require "labeler"
 require "project_manager"
@@ -29,7 +28,6 @@ class Processor
     notify_review
     add_labels
     move_new_issue_to_project
-    delegate_issue
     close_stale_issues
     logs.join("\n")
   end
@@ -88,13 +86,6 @@ class Processor
       if payload.opened_new_issue?
         log "Adding card for new issue in configured project column"
         log ProjectManager.new(issue: payload.issue, project_column_id: config.project_column_id).run
-      end
-    end
-
-    def delegate_issue
-      if payload.label_added?
-        log "Label added, pondering whether to move"
-        IssueDelegator.new(label: payload.label, issue: payload.issue, prefix: config.move_to_prefix).run
       end
     end
 

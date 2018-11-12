@@ -1,5 +1,4 @@
 class Label
-  NAME_DELIMITER = ": "
   COLORS = {
     Icebox: "eb6420",
     WIP: "5319e7"
@@ -22,14 +21,6 @@ class Label
     github.remove_label(issue.repo, issue.number, name)
   end
 
-  def prefix
-    name_parts.first
-  end
-
-  def suffix
-    name_parts.last
-  end
-
   private
 
     attr_reader :name
@@ -50,9 +41,5 @@ class Label
 
     def github
       Cp8.github_client
-    end
-
-    def name_parts
-      name.split(NAME_DELIMITER).map(&:strip)
     end
 end

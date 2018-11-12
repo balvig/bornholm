@@ -59,10 +59,6 @@ class Payload
     data[:pull_request].present?
   end
 
-  def label_added?
-    action.labeled?
-  end
-
   def action
     ActiveSupport::StringInquirer.new(data[:action])
   end

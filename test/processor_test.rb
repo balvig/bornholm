@@ -175,20 +175,6 @@ class ProcessorTest < Minitest::Test
     assert_equal ":white_check_mark: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 was approved> by reviewer _(cc <@submitter>)_", last_notification[:text]
   end
 
-  def test_moving_issues_when_labeled
-    github.expects(:create_issue).with("cookpad/dummy-squad", "Issue title", "_Moved from https://github.com/balvig/cp-8/issues/2 (cc @submitter)_\n\n---\nIssue body").once
-    github.expects(:close_issue).with("balvig/cp-8", 2)
-
-    process_payload(:move_to_label, config: { move_to_prefix: "move-to" } )
-  end
-
-  def test_moving_issues_to_repo_without_permissions
-    github.expects(:create_issue).once.raises(Octokit::NotFound)
-    github.expects(:add_comment)
-
-    process_payload(:move_to_label, config: { move_to_prefix: "move-to" } )
-  end
-
   private
 
     def process_payload(file, config: default_config)
