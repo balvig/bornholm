@@ -40,3 +40,7 @@ review_channel: reviews # Send review requests/updates to specified Slack channe
 project_column_id: 49 # Automatically add new issues to a project column
 move_to_prefix:  move-to # Move issue to other repo when labeled with prefix, ie `move-to:cookpad/cp8`
 ```
+
+## CLI
+
+At Cookpad, we use **cp8_cli** to create PRs, open the PR of the local branch in the browser and for similar tasks. Please find our example implementation under https://github.com/cookpad/cp8_cli and take some inspiration from it.
