@@ -43,4 +43,4 @@ move_to_prefix:  move-to # Move issue to other repo when labeled with prefix, ie
 
 ## CLI
 
-At Cookpad, we use **cp8_cli** to create PRs, open the PR of the local branch in the browser and for similar tasks. Please find our example implementation under https://github.com/cookpad/cp8_cli and take some inspiration from it.
+CP8 has a [CLI counterpart](https://github.com/cookpad/cp8_cli), that while not required, provides some extra convenience for GitHub-driven projects in addition to what the bot offers.
