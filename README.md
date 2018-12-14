@@ -39,6 +39,13 @@ review_channel: reviews # Send review requests/updates to specified Slack channe
 project_column_id: 49 # Automatically add new issues to a project column
 ```
 
+## User Mapping
+
+Your Github username needs to be mapped to your Slack ID so cp8 can send you slack notifications:
+
+- Copy your Slack ID from your account settings
+- Submit a PR to this repo to add `[github_name]:[slack_id]` to `/lib/user_mappings.yml`. See, for example, [this PR](https://github.com/cookpad/cp8/pull/68))
+
 ## CLI
 
 CP8 has a [CLI counterpart](https://github.com/cookpad/cp8_cli), that while not required, provides some extra convenience for GitHub-driven projects in addition to what the bot offers.
