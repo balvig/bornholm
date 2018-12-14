@@ -41,7 +41,7 @@ project_column_id: 49 # Automatically add new issues to a project column
 
 ## User Mapping
 
-Your Github username needs to be mapped to your Slack ID so cp8 can send you slack notifications:
+Your GitHub username needs to be mapped to your Slack ID in order for CP8 to mention you:
 
 - Copy your Slack ID from your account settings
 - Submit a PR to this repo to add `[github_name]:[slack_id]` to `/lib/user_mappings.yml`. See, for example, [this PR](https://github.com/cookpad/cp8/pull/68))
