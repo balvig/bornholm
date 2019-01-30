@@ -7,12 +7,16 @@ class ReviewCompleteNotification < Notification
   end
 
   def text
-    ":#{icon}: <#{link}|##{issue.number} #{action}> by #{review.user.login} _(cc #{issue.user.chat_name})_"
+    ":#{icon}: #{repo_name}<#{link}|##{issue.number} #{action}> by #{review.user.login} _(cc #{issue.user.chat_name})_"
   end
 
   private
 
     attr_reader :review, :issue
+
+    def repo_name
+      review.repository_name
+    end
 
     def link
       review.html_url

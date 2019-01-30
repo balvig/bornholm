@@ -23,6 +23,10 @@ class Review
     User.from_resource(user_resource)
   end
 
+  def repository_name
+    @_repository_name ||= html_url.split("/")[4]
+  end
+
   private
 
     attr_reader :state, :user_resource
