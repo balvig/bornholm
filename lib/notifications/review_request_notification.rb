@@ -37,7 +37,7 @@ class ReviewRequestNotification < Notification
       {
         author_name: issue.user.login,
         author_icon: issue.user.avatar_url,
-        fields: [issue_field, changes_field]
+        fields: [issue_field, changes_field, repo_field]
       }
     end
 
@@ -53,6 +53,14 @@ class ReviewRequestNotification < Notification
       {
         title: "Diff",
         value: "+#{issue.additions} / -#{issue.deletions}",
+        short: true
+      }
+    end
+
+    def repo_field
+      {
+        title: "Repo",
+        value: issue.repo,
         short: true
       }
     end

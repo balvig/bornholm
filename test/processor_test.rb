@@ -130,13 +130,19 @@ class ProcessorTest < Minitest::Test
     assert_equal ":mag: New PR", last_notification[:text]
   end
 
+  def test_repo_shown_in_attachment
+    process_payload(:pull_request)
+
+    assert_equal "balvig/cp-8", last_notification_attachment[:fields].last[:value]
+  end
+
   def test_notifying_new_small_pull_requests_without_mention
     github.stubs(:pull_request).returns(additions: 5, deletions: 5)
     process_payload(:pull_request)
 
     assert_equal ":mag: Small PR", last_notification[:text]
     assert_equal ":mag: Small PR", last_notification[:fallback]
-    assert_equal "+5 / -5", last_notification_attachment[:fields].last[:value]
+    assert_equal "+5 / -5", last_notification_attachment[:fields].second[:value]
   end
 
   def test_notifying_pull_requests_with_requested_reviewers
