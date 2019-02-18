@@ -7,19 +7,24 @@ class Issue
 
   attr_reader :id, :number, :html_url, :repo, :title, :body
 
-  def initialize(id:, number:, repo:, title: nil, body: nil, state: nil, html_url: nil, user: nil, **other)
+  def initialize(id:, number:, repo:, title: nil, body: nil, state: nil, draft: false, html_url: nil, user: nil, **other)
     @id = id
+    @number = number
+    @repo = repo
     @title = IssueTitle.new(title)
     @body = body
     @state = state
-    @number = number
+    @draft = draft
     @html_url = html_url
-    @repo = repo
     @user_resource = user
   end
 
   def wip?
     title.tags.include?(:wip)
+  end
+
+  def draft?
+    !!@draft
   end
 
   def closed?

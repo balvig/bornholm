@@ -44,6 +44,7 @@ class Processor
       return unless payload.pull_request_action?
       return unless payload.action.opened?
       return if payload.issue.wip?
+      return if payload.issue.draft?
 
       log "Notifying new pull request"
       notify ReadyForReviewNotification.new(issue: payload.issue)
