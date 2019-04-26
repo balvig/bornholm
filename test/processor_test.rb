@@ -163,6 +163,12 @@ class ProcessorTest < Minitest::Test
     assert_equal ":mag: Small PR", last_notification[:text]
   end
 
+  def test_notifying_drafts_submitted_for_review
+    process_payload(:ready_for_review)
+
+    assert_equal ":mag: Small PR", last_notification[:text]
+  end
+
   def test_not_notifying_drafted_prs
     process_payload(:pull_request_draft)
 

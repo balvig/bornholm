@@ -22,6 +22,7 @@ class Processor
     return if event_triggered_by_bot?
 
     notify_new_pull_request
+    notify_ready_for_review
     notify_unwip
     notify_blocker
     notify_recycle
@@ -47,6 +48,13 @@ class Processor
       return if payload.issue.draft?
 
       log "Notifying new pull request"
+      notify ReadyForReviewNotification.new(issue: payload.issue)
+    end
+
+    def notify_ready_for_review
+      return unless payload.action.ready_for_review?
+
+      log "Notifying pull request ready for review"
       notify ReadyForReviewNotification.new(issue: payload.issue)
     end
 
