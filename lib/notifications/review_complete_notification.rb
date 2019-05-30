@@ -22,7 +22,7 @@ class ReviewCompleteNotification < Notification
       if review.approved?
         :white_check_mark
       else
-        :x
+        :speech_balloon
       end
     end
 
@@ -30,7 +30,7 @@ class ReviewCompleteNotification < Notification
       if review.approved?
         "was approved"
       else
-        "changes required"
+        "changes suggested"
       end
     end
 end
