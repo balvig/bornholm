@@ -39,7 +39,7 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     public_suffix (3.0.1)
-    puma (3.12.3)
+    puma (3.12.4)
     rack (2.0.8)
     rack-protection (2.0.3)
       rack
