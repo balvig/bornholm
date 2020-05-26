@@ -1,9 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (5.1.5)
+    activesupport (5.2.4.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (~> 0.7)
+      i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     addressable (2.5.2)
@@ -11,11 +11,11 @@ GEM
     ansi (1.5.0)
     builder (3.2.2)
     coderay (1.1.1)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.6)
     dotenv (2.2.1)
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
-    i18n (0.9.5)
+    i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     jwt (2.1.0)
     metaclass (0.0.4)
@@ -59,7 +59,7 @@ GEM
     slop (3.6.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    tzinfo (1.2.5)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
 
 PLATFORMS
