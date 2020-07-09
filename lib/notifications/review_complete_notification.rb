@@ -10,6 +10,10 @@ class ReviewCompleteNotification < Notification
     ":#{icon}: <#{link}|##{issue.number} #{action}> by #{review.user.login} _(cc #{issue.user.chat_name})_"
   end
 
+  def attachments
+    [attachment]
+  end
+
   private
 
     attr_reader :review, :issue
@@ -32,5 +36,16 @@ class ReviewCompleteNotification < Notification
       else
         "changes requested"
       end
+    end
+
+    def attachment
+      { fields: [issue_field] }
+    end
+
+    def issue_field
+      {
+        value: "<#{link}|#{issue.title}>",
+        short: true
+      }
     end
 end

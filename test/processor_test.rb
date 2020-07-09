@@ -202,12 +202,14 @@ class ProcessorTest < Minitest::Test
     process_payload(:changes_requested)
 
     assert_equal ":speech_balloon: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 changes requested> by reviewer _(cc <@submitter>)_", last_notification[:text]
+    assert_equal "<https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|Generate link with a correct region>", last_notification_attachment[:fields].first[:value]
   end
 
   def test_notifying_approval
     process_payload(:approval)
 
     assert_equal ":white_check_mark: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 was approved> by reviewer _(cc <@submitter>)_", last_notification[:text]
+    assert_equal "<https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|Generate link with a correct region>", last_notification_attachment[:fields].first[:value]
   end
 
   private
