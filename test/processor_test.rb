@@ -20,6 +20,7 @@ class ProcessorTest < Minitest::Test
     Time.stubs(:now).returns(Time.at(0))
     Cp8.github_client = github
     Cp8.chat_client = TestChatClient.new
+    BuddyResolver.mappings = []
   end
 
   def test_closing_stale_prs
@@ -208,6 +209,14 @@ class ProcessorTest < Minitest::Test
     process_payload(:approval)
 
     assert_equal ":white_check_mark: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 was approved> by reviewer _(cc <@submitter>)_", last_notification[:text]
+  end
+
+  def test_assigning_buddy
+    BuddyResolver.mappings = [["balvig", "knack"]]
+    github.expects(:request_pull_request_review).with("balvig/cp-8", 1, reviewers: ["knack"])
+    github.expects(:add_comment)
+
+    process_payload(:pull_request)
   end
 
   private

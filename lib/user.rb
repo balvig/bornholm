@@ -1,4 +1,5 @@
 require "yaml"
+require "buddy_resolver"
 
 class User
   BOT_LOGINS = %w(houndci-bot cookpad-devel)

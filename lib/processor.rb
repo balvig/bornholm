@@ -1,4 +1,5 @@
 require "active_support"
+require "buddy_mention"
 require "configuration"
 require "issue_closer"
 require "notifier"
@@ -19,6 +20,7 @@ class Processor
   def process
     return if event_triggered_by_bot?
 
+    mention_buddy
     notify_new_pull_request
     notify_ready_for_review
     notify_unwip
@@ -37,6 +39,14 @@ class Processor
 
     def log(msg)
       logs << msg
+    end
+
+    def mention_buddy
+      return unless payload.pull_request_action?
+      return unless payload.action.opened?
+
+      log "Mentioning buddy"
+      BuddyMention.new(payload.issue).mention
     end
 
     def notify_new_pull_request
