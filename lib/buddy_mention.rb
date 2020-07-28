@@ -30,7 +30,7 @@ class BuddyMention
       <<~TEXT
       **[Try-out]**
 
-      @#{buddy.login} is your buddy as part of the [Buddy System](https://github.com/cookpad/web-chapter/issues/411) try-out and has been added as a reviewer.
+      @#{buddy.login} is your buddy as part of the [Buddy System](https://github.com/cookpad/web-chapter/issues/410) try-out and has been added as a reviewer.
       TEXT
     end
 
