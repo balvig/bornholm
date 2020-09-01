@@ -1,12 +1,12 @@
 require "test_helper"
 
-class BuddyResolverTest < Minitest::Test
+class BuddyMentionTest < Minitest::Test
   def setup
-    BuddyResolver.mappings = [["balvig", "knack"]]
+    BuddyResolver.mappings = [["Knack", "balvig"]]
   end
 
   def test_buddy_mapping
-    user = User.new(login: "knack")
+    user = User.new(login: "Knack")
     assert_equal "balvig", BuddyResolver.new(user).buddy.login
   end
 

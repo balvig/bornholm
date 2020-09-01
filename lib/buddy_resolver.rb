@@ -16,26 +16,27 @@ class BuddyResolver
   private
 
     attr_reader :user
-    delegate :login, to: :user
 
     def buddies
-      buddy_logins.map do |login|
-        User.new(login: login)
+      members.without(user)
+    end
+
+    def members
+      find_members || []
+    end
+
+    def mapped_users
+      mappings.map do |logins|
+        logins.map do |login|
+          User.new(login: login)
+        end
       end
     end
 
-    def buddy_logins
-      member_logins.without(login)
-    end
-
-    def member_logins
-      find_member_logins || []
-    end
-
-    def find_member_logins
-      mappings.find do |members|
-        members.map(&:downcase).find do |member|
-          member == login
+    def find_members
+      mapped_users.find do |members|
+        members.find do |member|
+          member == user
         end
       end
     end

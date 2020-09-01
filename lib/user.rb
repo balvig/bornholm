@@ -29,10 +29,12 @@ class User
     @avatar_url + "&size=#{size}"
   end
 
-  def eql?(other)
+  def ==(other)
     return unless other.is_a?(User)
     login == other.login
   end
+
+  alias :eql? :==
 
   def hash
     login.hash
