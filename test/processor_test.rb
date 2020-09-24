@@ -202,7 +202,7 @@ class ProcessorTest < Minitest::Test
   def test_notifying_requested_changes
     process_payload(:changes_requested)
 
-    assert_equal ":speech_balloon: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 changes requested> by reviewer _(cc <@submitter>)_", last_notification[:text]
+    assert_equal ":speech_balloon: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 reviewed> by reviewer _(cc <@submitter>)_", last_notification[:text]
   end
 
   def test_notifying_approval

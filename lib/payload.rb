@@ -44,7 +44,7 @@ class Payload
   end
 
   def review_action?
-    action.submitted? && review&.decisive?
+    action.submitted? && review
   end
 
   def opened_new_issue?
