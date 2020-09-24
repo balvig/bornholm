@@ -43,7 +43,9 @@ class Processor
 
     def mention_buddy
       return unless payload.pull_request_action?
-      return unless payload.action.opened?
+      return unless payload.action.opened? || payload.action.ready_for_review?
+      return if payload.issue.wip?
+      return if payload.issue.draft?
 
       log "Mentioning buddy"
       BuddyMention.new(payload.issue).mention
