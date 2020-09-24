@@ -25,6 +25,10 @@ class Issue
     !!@draft
   end
 
+  def draft_or_wip?
+    draft? || wip?
+  end
+
   def closed?
     state == "closed"
   end
