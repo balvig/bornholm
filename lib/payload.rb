@@ -28,7 +28,7 @@ class Payload
   end
 
   def sender_bot?
-    data[:sender][:type] == "Bot"
+    sender.bot?
   end
 
   def unwip_action?
