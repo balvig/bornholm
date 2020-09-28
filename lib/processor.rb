@@ -88,6 +88,7 @@ class Processor
     end
 
     def notify_review
+      return if payload.submitter_action?
       return unless payload.review_action?
 
       log "Notifying review"

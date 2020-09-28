@@ -47,6 +47,10 @@ class Payload
     action.submitted? && review
   end
 
+  def submitter_action?
+    issue.user == sender
+  end
+
   def opened_new_issue?
     action.opened? && issue_action?
   end
@@ -111,5 +115,9 @@ class Payload
 
     def dismissed_review?
       action == "dismissed"
+    end
+
+    def sender
+      User.new(data[:sender])
     end
 end

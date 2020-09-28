@@ -211,6 +211,12 @@ class ProcessorTest < Minitest::Test
     assert_equal ":white_check_mark: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 was approved> by reviewer _(cc <@submitter>)_", last_notification[:text]
   end
 
+  def test_not_notifying_reviews_from_submitter
+    process_payload(:submitter_review)
+
+    assert_nil last_notification
+  end
+
   def test_assigning_buddy
     BuddyResolver.mappings = [["balvig", "knack"]]
     github.expects(:request_pull_request_review).with("balvig/cp-8", 1, reviewers: ["knack"])
