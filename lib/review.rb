@@ -11,14 +11,6 @@ class Review
     state == "approved"
   end
 
-  def changes_requested?
-    state == "changes_requested"
-  end
-
-  def decisive?
-    approved? || changes_requested?
-  end
-
   def user
     User.from_resource(user_resource)
   end

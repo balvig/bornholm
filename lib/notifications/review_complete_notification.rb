@@ -30,7 +30,7 @@ class ReviewCompleteNotification < Notification
       if review.approved?
         "was approved"
       else
-        "changes requested"
+        "reviewed"
       end
     end
 end

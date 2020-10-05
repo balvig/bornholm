@@ -28,7 +28,7 @@ class Payload
   end
 
   def sender_bot?
-    data[:sender][:type] == "Bot"
+    sender.bot?
   end
 
   def unwip_action?
@@ -44,7 +44,11 @@ class Payload
   end
 
   def review_action?
-    action.submitted? && review&.decisive?
+    action.submitted? && review
+  end
+
+  def submitter_action?
+    issue.user == sender
   end
 
   def opened_new_issue?
@@ -111,5 +115,9 @@ class Payload
 
     def dismissed_review?
       action == "dismissed"
+    end
+
+    def sender
+      User.new(data[:sender])
     end
 end
