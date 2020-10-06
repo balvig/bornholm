@@ -23,7 +23,6 @@ class Processor
     mention_buddy
     notify_new_pull_request
     notify_ready_for_review
-    notify_unwip
     notify_blocker
     notify_recycle
     notify_review
@@ -52,7 +51,6 @@ class Processor
     def notify_new_pull_request
       return unless payload.pull_request_action?
       return unless payload.action.opened?
-      return if payload.issue.wip?
       return if payload.issue.draft?
 
       log "Notifying new pull request"
@@ -63,13 +61,6 @@ class Processor
       return unless payload.action.ready_for_review?
 
       log "Notifying pull request ready for review"
-      send_ready_for_review_notification
-    end
-
-    def notify_unwip
-      return unless payload.unwip_action?
-
-      log "Notifying unwip"
       send_ready_for_review_notification
     end
 

@@ -9,12 +9,6 @@ class Labeler
     if open?
       remove_label(:Icebox)
     end
-
-    if wip?
-      add_label(:WIP)
-    else
-      remove_label(:WIP)
-    end
   end
 
   private
@@ -27,10 +21,6 @@ class Labeler
 
     def open?
       !issue.closed?
-    end
-
-    def wip?
-      issue.wip?
     end
 
     def add_label(label)
