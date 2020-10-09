@@ -17,16 +17,8 @@ class Issue
     @user_resource = user
   end
 
-  def wip?
-    title.tags.include?(:wip)
-  end
-
   def draft?
     !!@draft
-  end
-
-  def draft_or_wip?
-    draft? || wip?
   end
 
   def closed?

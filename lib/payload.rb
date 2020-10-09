@@ -31,10 +31,6 @@ class Payload
     sender.bot?
   end
 
-  def unwip_action?
-    tags.removed.include?(:wip)
-  end
-
   def blocker_action?
     tags.added.include?(:blocker)
   end

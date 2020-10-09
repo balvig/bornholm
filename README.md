@@ -6,9 +6,8 @@
 
 ## Purpose
 
-- Keep trackers clean by cleaning out stale pull requests/issues
-- Help reviewers focus by tagging WIP pull requests
 - Tighten review loop by notifying when PRs need immediate attention
+- Keep trackers clean by cleaning out stale pull requests/issues
 - Move issues between projects
 
 ## Usage
@@ -16,12 +15,10 @@
 CP-8 can:
 
 - Close stale issues with no activity
-- Add a `WIP` label to PRs with "[WIP]" in title
 - Notify in specified Slack channel when:
-  - a new (non-WIP) PR is opened
-  - a WIP PR is "un-WIPped"
+  - a PR is published
   - a `:recycle:` comment is posted
-  - a PR is approved/has changes requested
+  - a PR is reviewed
   - a PR is blocking other PRs signified by having `[Blocker]` in the title
 - Automatically add new issues to projects
 

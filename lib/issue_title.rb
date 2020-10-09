@@ -1,6 +1,5 @@
 class IssueTitle < SimpleDelegator
   VALID_TAGS = {
-    "WIP" => :wip,
     "Blocker" => :blocker
   }
 
