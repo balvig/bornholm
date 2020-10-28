@@ -1,5 +1,5 @@
 require "active_support"
-require "buddy_mention"
+require "buddy_assignment"
 require "configuration"
 require "issue_closer"
 require "notifier"
@@ -20,7 +20,7 @@ class Processor
   def process
     return if event_triggered_by_bot?
 
-    mention_buddy
+    assign_buddy
     notify_ready_for_review
     notify_blocker
     notify_recycle
@@ -39,11 +39,11 @@ class Processor
       logs << msg
     end
 
-    def mention_buddy
+    def assign_buddy
       return unless ready_for_review_event?
 
-      log "Mentioning buddy"
-      BuddyMention.new(payload.issue).mention
+      log "Assigning buddy"
+      BuddyAssignment.new(payload.issue).assign
     end
 
     def notify_ready_for_review
