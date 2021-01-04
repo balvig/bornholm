@@ -169,12 +169,18 @@ class ProcessorTest < Minitest::Test
     assert_nil last_notification
   end
 
-  def test_assigning_buddy
+  def test_assigning_buddy_on_new_pr
     BuddyResolver.mappings = [["balvig", "knack"]]
     github.expects(:request_pull_request_review).with("balvig/cp-8", 1, reviewers: ["knack"])
-    github.expects(:add_comment)
 
     process_payload(:pull_request)
+  end
+
+  def test_assigning_buddy_on_ready_for_review
+    BuddyResolver.mappings = [["balvig", "knack"]]
+    github.expects(:request_pull_request_review).with("cookpad/cp8", 83, reviewers: ["knack"])
+
+    process_payload(:ready_for_review)
   end
 
   private

@@ -1,13 +1,12 @@
-class BuddyMention
+class BuddyAssignment
   def initialize(issue)
     @issue = issue
   end
 
-  def mention
+  def assign
     return unless buddy
 
     request_review
-    post_comment
   end
 
   private
@@ -20,18 +19,6 @@ class BuddyMention
 
     def request_review
       github.request_pull_request_review(issue.repo, issue.number,  reviewers: [buddy.login])
-    end
-
-    def post_comment
-      github.add_comment(issue.repo, issue.number, comment_body)
-    end
-
-    def comment_body
-      <<~TEXT
-      **[Try-out]**
-
-      @#{buddy.login} is your buddy as part of the [Buddy System](https://github.com/cookpad/web-chapter/issues/410) try-out and has been added as a reviewer.
-      TEXT
     end
 
     def github

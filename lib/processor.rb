@@ -1,5 +1,5 @@
 require "active_support"
-require "buddy_mention"
+require "buddy_assignment"
 require "configuration"
 require "issue_closer"
 require "notifier"
@@ -20,8 +20,7 @@ class Processor
   def process
     return if event_triggered_by_bot?
 
-    mention_buddy
-    notify_new_pull_request
+    assign_buddy
     notify_ready_for_review
     notify_blocker
     notify_recycle
@@ -40,28 +39,20 @@ class Processor
       logs << msg
     end
 
-    def mention_buddy
-      return unless payload.pull_request_action?
-      return unless payload.action.opened?
+    def assign_buddy
+      return unless ready_for_review_event?
 
-      log "Mentioning buddy"
-      BuddyMention.new(payload.issue).mention
-    end
-
-    def notify_new_pull_request
-      return unless payload.pull_request_action?
-      return unless payload.action.opened?
-      return if payload.issue.draft?
-
-      log "Notifying new pull request"
-      send_ready_for_review_notification
+      log "Assigning buddy"
+      BuddyAssignment.new(payload.issue).assign
     end
 
     def notify_ready_for_review
-      return unless payload.action.ready_for_review?
+      return unless ready_for_review_event?
 
       log "Notifying pull request ready for review"
-      send_ready_for_review_notification
+      notify ReadyForReviewNotification.new(
+        issue: payload.issue, mention_threshold: config.mention_threshold
+      )
     end
 
     def notify_blocker
@@ -105,12 +96,6 @@ class Processor
       end
     end
 
-    def send_ready_for_review_notification
-      notify ReadyForReviewNotification.new(
-        issue: payload.issue, mention_threshold: config.mention_threshold
-      )
-    end
-
     def notify(notification)
       notifier.deliver(notification)
     end
@@ -129,5 +114,13 @@ class Processor
 
     def github
       Cp8.github_client
+    end
+
+    def ready_for_review_event?
+      return false unless payload.pull_request_action?
+      return false unless payload.action.opened? || payload.action.ready_for_review?
+      return false if payload.issue.draft?
+
+      true
     end
 end
