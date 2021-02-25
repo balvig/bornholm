@@ -1,7 +1,6 @@
 class Label
   COLORS = {
-    Icebox: "eb6420",
-    WIP: "5319e7"
+    Icebox: "eb6420"
   }
 
   def initialize(name)

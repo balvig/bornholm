@@ -17,10 +17,6 @@ class Issue
     @user_resource = user
   end
 
-  def wip?
-    title.tags.include?(:wip)
-  end
-
   def draft?
     !!@draft
   end
@@ -30,7 +26,7 @@ class Issue
   end
 
   def peer_reviewers
-    reviewers.without(user, *User.bots)
+    reviewers.reject(&:bot?)
   end
 
   def requested_reviewers

@@ -2,9 +2,9 @@ require "test_helper"
 
 class IssueTitleTest < Minitest::Test
   def test_tags
-    title = IssueTitle.new("[WIP] Still working on it")
+    title = IssueTitle.new("[Blocker] PR blocking other PRs")
 
-    assert_equal [:wip], title.tags
+    assert_equal [:blocker], title.tags
   end
 
   def test_title_escaping

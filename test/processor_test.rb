@@ -20,6 +20,7 @@ class ProcessorTest < Minitest::Test
     Time.stubs(:now).returns(Time.at(0))
     Cp8.github_client = github
     Cp8.chat_client = TestChatClient.new
+    BuddyResolver.mappings = []
   end
 
   def test_closing_stale_prs
@@ -28,13 +29,13 @@ class ProcessorTest < Minitest::Test
     github.expects(:close_issue).with("balvig/cp-8", 1)
     github.expects(:add_labels_to_an_issue).with("balvig/cp-8", 1, [:Icebox]).once
 
-    process_payload(:issue_wip, config: { stale_issue_weeks: 4 } )
+    process_payload(:issue, config: { stale_issue_weeks: 4 } )
   end
 
   def test_not_closing_stales_prs_if_not_configrued
     github.expects(:search_issues).never
 
-    process_payload(:issue_wip)
+    process_payload(:issue)
   end
 
   def test_not_reacting_to_own_posts
@@ -45,64 +46,22 @@ class ProcessorTest < Minitest::Test
     process_payload(:cp8_commented)
   end
 
-  def test_creating_pr_with_wip_label
-    github.expects(:label).with("balvig/cp-8", :WIP).once.raises(Octokit::NotFound)
-    github.expects(:add_label).with("balvig/cp-8", :WIP, "5319e7").once
-    github.expects(:add_labels_to_an_issue).with("balvig/cp-8", 1, [:WIP]).once
-
-    process_payload(:pull_request_wip)
-  end
-
-  def test_adding_wip_label_when_title_has_multiple_prefixes
-    github.expects(:add_labels_to_an_issue).with("balvig/cp-8", 1, [:WIP]).once
-
-    process_payload(:pull_request_with_multiple_prefixes)
-  end
-
-  def test_ignoring_label_if_already_added
-    github.expects(:labels_for_issue).with("balvig/cp-8", 1).twice.returns([stub(name: "WIP")])
-    github.expects(:add_labels_to_an_issue).never
-
-    process_payload(:pull_request_wip)
-  end
-
-  def test_adding_wip_label
-    github.expects(:label).with("balvig/cp-8", :WIP).once.raises(Octokit::NotFound)
-    github.expects(:add_label).with("balvig/cp-8", :WIP, "5319e7").once
-    github.expects(:add_labels_to_an_issue).with("balvig/cp-8", 1, [:WIP]).once
-
-    process_payload(:pull_request_added_wip)
-  end
-
   def test_adding_new_issues_to_project
     github.expects(:create_project_card).with(49, content_id: 137013866, content_type: "Issue"). once
 
-    process_payload(:issue_wip, config: { project_column_id: PROJECT_COLUMN_ID } )
+    process_payload(:issue, config: { project_column_id: PROJECT_COLUMN_ID } )
   end
 
   def test_adding_new_issues_to_project_if_column_not_in_project
     github.expects(:create_project_card).raises(Octokit::NotFound)
 
-    process_payload(:issue_wip, config: { project_column_id: PROJECT_COLUMN_ID } )
+    process_payload(:issue, config: { project_column_id: PROJECT_COLUMN_ID } )
   end
 
   def test_not_adding_new_pr_to_project
     github.expects(:create_project_card).never
 
     process_payload(:pull_request, config: { project_column_id: PROJECT_COLUMN_ID } )
-  end
-
-  def test_not_adding_labels_to_plain_issues
-    github.expects(:add_labels_to_an_issue).never
-
-    process_payload(:issue_wip)
-  end
-
-  def test_removing_wip_label
-    github.stubs(:labels_for_issue).with("balvig/cp-8", 1).returns([stub(name: "WIP")])
-    github.expects(:remove_label).with("balvig/cp-8", 1, :WIP).once
-
-    process_payload(:pull_request_removed_wip)
   end
 
   def test_notifying_recycle_requests
@@ -174,12 +133,6 @@ class ProcessorTest < Minitest::Test
     assert_equal ":mag: Small PR - <@reviewer> please", last_notification[:text]
   end
 
-  def test_notifying_unwipped_issues
-    process_payload(:pull_request_removed_wip)
-
-    assert_equal ":mag: Small PR", last_notification[:text]
-  end
-
   def test_notifying_drafts_submitted_for_review
     process_payload(:ready_for_review)
 
@@ -201,8 +154,12 @@ class ProcessorTest < Minitest::Test
   def test_notifying_requested_changes
     process_payload(:changes_requested)
 
+<<<<<<< HEAD
     assert_equal ":speech_balloon: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 changes requested> by reviewer _(cc <@submitter>)_", last_notification[:text]
     assert_equal "<https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|Generate link with a correct region>", last_notification_attachment[:fields].first[:value]
+=======
+    assert_equal ":speech_balloon: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 reviewed> by reviewer _(cc <@submitter>)_", last_notification[:text]
+>>>>>>> main
   end
 
   def test_notifying_approval
@@ -210,6 +167,26 @@ class ProcessorTest < Minitest::Test
 
     assert_equal ":white_check_mark: <https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|#6561 was approved> by reviewer _(cc <@submitter>)_", last_notification[:text]
     assert_equal "<https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834|Generate link with a correct region>", last_notification_attachment[:fields].first[:value]
+  end
+
+  def test_not_notifying_reviews_from_submitter
+    process_payload(:submitter_review)
+
+    assert_nil last_notification
+  end
+
+  def test_assigning_buddy_on_new_pr
+    BuddyResolver.mappings = [["balvig", "knack"]]
+    github.expects(:request_pull_request_review).with("balvig/cp-8", 1, reviewers: ["knack"])
+
+    process_payload(:pull_request)
+  end
+
+  def test_assigning_buddy_on_ready_for_review
+    BuddyResolver.mappings = [["balvig", "knack"]]
+    github.expects(:request_pull_request_review).with("cookpad/cp8", 83, reviewers: ["knack"])
+
+    process_payload(:ready_for_review)
   end
 
   private

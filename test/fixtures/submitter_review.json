@@ -1,0 +1,30 @@
+{
+  "action": "submitted",
+  "review": {
+    "id": 85607834,
+    "user": {
+      "login": "submitter",
+      "id": 4912
+    },
+    "state": "commented",
+    "html_url": "https://github.com/cookpad/cp-8/pull/6561#pullrequestreview-85607834"
+  },
+  "pull_request": {
+    "id": 158812981,
+    "number": 6561,
+    "title": "Generate link with a correct region",
+    "user": {
+      "login": "submitter",
+      "id": 4912
+    }
+  },
+  "repository": {
+    "id": 21350067,
+    "name": "cp-8",
+    "full_name": "cookpad/cp-8"
+  },
+  "sender": {
+    "login": "submitter",
+    "id": 4912
+  }
+}
