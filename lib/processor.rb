@@ -13,7 +13,7 @@ require "notifications/ready_for_review_notification"
 class Processor
   def initialize(payload, config: {})
     @payload = payload
-    @config = Configuration.new(config.symbolize_keys)
+    @config = Configuration.new(**config.symbolize_keys)
     @logs = []
   end
 

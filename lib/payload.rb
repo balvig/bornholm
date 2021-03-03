@@ -15,12 +15,12 @@ class Payload
   end
 
   def issue
-    @_issue ||= Issue.new(issue_params)
+    @_issue ||= Issue.new(**issue_params)
   end
 
   def review
     return if review_params.blank?
-    @_review ||= Review.new(review_params)
+    @_review ||= Review.new(**review_params)
   end
 
   def repo
@@ -70,7 +70,7 @@ class Payload
   def comment
     return unless comment_params
 
-    Comment.new(comment_params)
+    Comment.new(**comment_params)
   end
 
   def installation_id
@@ -114,6 +114,6 @@ class Payload
     end
 
     def sender
-      User.new(data[:sender])
+      User.new(**data[:sender])
     end
 end
