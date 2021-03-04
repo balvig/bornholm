@@ -6,7 +6,7 @@ class User
   attr_reader :login
 
   def self.from_resource(resource)
-    new(**resource.to_h)
+    new(resource.to_h)
   end
 
   def initialize(login:, avatar_url: nil, type: "User", **other)

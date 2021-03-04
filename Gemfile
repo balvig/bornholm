@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "3.0.0"
+ruby "2.6.6"
 
 gem "activesupport"
 gem "dotenv"
