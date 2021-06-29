@@ -34,6 +34,8 @@ class ReadyForReviewNotification < ReviewRequestNotification
     end
 
     def small_pr?
+      return true if mention_threshold.zero?
+
       issue.additions <= mention_threshold
     end
 end
